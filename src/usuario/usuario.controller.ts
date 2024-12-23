@@ -8,23 +8,23 @@ export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
   @Post()
-  create(@Body() createUsuarioDto: CreateUsuarioDto) {
-    return this.usuarioService.create(createUsuarioDto);
+  Cadastrar(@Body() createUsuarioDto: CreateUsuarioDto) {
+   return this.usuarioService.Criar(createUsuarioDto)
   }
 
   @Get()
   findAll() {
-    return this.usuarioService.findAll();
+    return this.usuarioService.Listar();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.usuarioService.findOne(+id);
+    return this.usuarioService.Usuario(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
-    return this.usuarioService.update(+id, updateUsuarioDto);
+    return this.usuarioService.Atualizar(id, updateUsuarioDto);
   }
 
   @Delete(':id')

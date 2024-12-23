@@ -1,26 +1,77 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsuarioService {
-  create(createUsuarioDto: CreateUsuarioDto) {
-    return 'This action adds a new usuario';
+
+  constructor(private prisma: PrismaService) { }
+
+  async Criar(createUsuarioDto: CreateUsuarioDto) {
+    const usuarioExistente = await this.prisma.usuario.findFirst({
+      where: { email: createUsuarioDto.email }
+    })
+
+    if (!usuarioExistente) {
+      const novoUsuario = await this.prisma.usuario.create({
+        data: {
+          nome: createUsuarioDto.nome,
+          sobrenome: createUsuarioDto.sobrenome,
+          email: createUsuarioDto.email,
+          senha: createUsuarioDto.senha
+        }
+      })
+
+      return {
+        mensagem: `Usuário ${novoUsuario.nome.toUpperCase()} ${novoUsuario.sobrenome.toUpperCase()} foi cadastrado com sucesso. `
+      }
+    }
+
+    throw new HttpException("Usuário já cadastrado no sistema, por gentileza, verificar.", HttpStatus.BAD_REQUEST)
   }
 
-  findAll() {
-    return `This action returns all usuario`;
+  async Listar() {
+    const usuarios = await this.prisma.usuario.findMany()
+    if (!usuarios) {
+      throw new HttpException("Não existe nenhum usuário cadastrado no banco de dados.", HttpStatus.NOT_FOUND)
+    }
+    return usuarios
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} usuario`;
+  async Usuario(id: string) {
+    const usuario = await this.prisma.usuario.findFirst({ where: { id }})
+
+    if(!usuario) {
+      throw new HttpException("Não existe nenhum usuário vinculado ao ID informado.", HttpStatus.NOT_FOUND) 
+    }
+    return usuario;
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
+  async Atualizar(id: string, updateUsuarioDto: UpdateUsuarioDto) {
+    try {
+      const idUsuario = await this.prisma.usuario.findFirst({ where: { id }})
+
+      if(!idUsuario) {
+        throw new HttpException("Não existe nenhum usuário vinculado ao ID informado.", HttpStatus.NOT_FOUND) 
+      }
+
+      const usuarioEditado = await this.prisma.usuario.update({
+        where: { id },
+        data: updateUsuarioDto
+      })
+
+      return {
+        status: "Os dados foram atualizados com sucesso.",
+        dados_antigos: idUsuario,
+        dados_atualizados: usuarioEditado
+      }
+    } catch (error) {
+      throw new HttpException("Tivemos um problema interno, por favor tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR) 
+    }
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} usuario`;
   }
 }
