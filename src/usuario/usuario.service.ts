@@ -1,7 +1,7 @@
-import { PrismaService } from './../prisma/prisma.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsuarioService {
@@ -24,7 +24,7 @@ export class UsuarioService {
       })
 
       return {
-        mensagem: `Usuário ${createUsuarioDto.nome.toUpperCase()} ${createUsuarioDto.sobrenome.toUpperCase()} foi cadastrado com sucesso. `
+        mensagem: `Usuário ${novoUsuario.nome.toUpperCase()} ${novoUsuario.sobrenome.toUpperCase()} foi cadastrado com sucesso. `
       }
     }
 

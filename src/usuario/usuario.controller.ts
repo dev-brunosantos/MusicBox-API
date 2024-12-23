@@ -8,9 +8,8 @@ export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService) {}
 
   @Post()
-  async Cadastrar(@Body() createUsuarioDto: CreateUsuarioDto) {
-    const criar = await this.usuarioService.Criar(createUsuarioDto)
-    return criar
+  Cadastrar(@Body() createUsuarioDto: CreateUsuarioDto) {
+   return this.usuarioService.Criar(createUsuarioDto)
   }
 
   @Get()
