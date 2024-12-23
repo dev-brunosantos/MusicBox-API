@@ -14,7 +14,7 @@ export class UsuarioController {
 
   @Get()
   findAll() {
-    return this.usuarioService.findAll();
+    return this.usuarioService.Listar();
   }
 
   @Get(':id')
