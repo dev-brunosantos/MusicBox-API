@@ -1,5 +1,5 @@
 export class CreateUsuarioDto {
-    name: string;
+    nome: string;
     sobrenome?: string;
     email: string;
     senha: string;
