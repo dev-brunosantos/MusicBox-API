@@ -39,8 +39,13 @@ export class UsuarioService {
     return usuarios
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} usuario`;
+  async Usuario(id: string) {
+    const usuario = await this.prisma.usuario.findFirst({ where: { id }})
+
+    if(!usuario) {
+      throw new HttpException("Não existe nenhum usuário vinculado ao ID informado.", HttpStatus.NOT_FOUND) 
+    }
+    return usuario;
   }
 
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
