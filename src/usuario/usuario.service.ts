@@ -1,26 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { PrismaService } from './../prisma/prisma.service';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 
 @Injectable()
 export class UsuarioService {
-  create(createUsuarioDto: CreateUsuarioDto) {
-    return 'This action adds a new usuario';
+
+  constructor(private prisma: PrismaService) {}
+
+  async Criar(createUsuarioDto: CreateUsuarioDto) {
+    const usuarioExistente = await this.prisma.usuario.findFirst({
+      where: { email: createUsuarioDto.email }
+    })
+
+    if(!usuarioExistente) {
+      const novoUsuario = await this.prisma.usuario.create({
+        data: {
+          nome: createUsuarioDto.nome,
+          sobrenome: createUsuarioDto.sobrenome,
+          email: createUsuarioDto.email,
+          senha: createUsuarioDto.senha
+        }
+      })
+
+      return {
+        mensagem: `Usuário ${createUsuarioDto.nome.toUpperCase()} ${createUsuarioDto.sobrenome.toUpperCase()} foi cadastrado com sucesso. `
+      }
+    }
+
+    throw new HttpException("Usuário já cadastrado no sistema, por gentileza, verificar.", HttpStatus.BAD_REQUEST)
   }
 
-  findAll() {
+  async findAll() {
     return `This action returns all usuario`;
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     return `This action returns a #${id} usuario`;
   }
 
-  update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
+  async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
     return `This action updates a #${id} usuario`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} usuario`;
   }
 }
