@@ -48,8 +48,27 @@ export class UsuarioService {
     return usuario;
   }
 
-  async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
+  async Atualizar(id: string, updateUsuarioDto: UpdateUsuarioDto) {
+    try {
+      const idUsuario = await this.prisma.usuario.findFirst({ where: { id }})
+
+      if(!idUsuario) {
+        throw new HttpException("Não existe nenhum usuário vinculado ao ID informado.", HttpStatus.NOT_FOUND) 
+      }
+
+      const usuarioEditado = await this.prisma.usuario.update({
+        where: { id },
+        data: updateUsuarioDto
+      })
+
+      return {
+        status: "Os dados foram atualizados com sucesso.",
+        dados_antigos: idUsuario,
+        dados_atualizados: usuarioEditado
+      }
+    } catch (error) {
+      throw new HttpException("Tivemos um problema interno, por favor tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR) 
+    }
   }
 
   async remove(id: number) {
