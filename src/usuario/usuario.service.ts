@@ -6,14 +6,14 @@ import { PrismaService } from '../prisma/prisma.service';
 @Injectable()
 export class UsuarioService {
 
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async Criar(createUsuarioDto: CreateUsuarioDto) {
     const usuarioExistente = await this.prisma.usuario.findFirst({
       where: { email: createUsuarioDto.email }
     })
 
-    if(!usuarioExistente) {
+    if (!usuarioExistente) {
       const novoUsuario = await this.prisma.usuario.create({
         data: {
           nome: createUsuarioDto.nome,
@@ -32,7 +32,11 @@ export class UsuarioService {
   }
 
   async findAll() {
-    return `This action returns all usuario`;
+    const usuarios = await this.prisma.usuario.findMany()
+    if (!usuarios) {
+      throw new HttpException("Não existe nenhum usuário cadastrado no banco de dados.", HttpStatus.NOT_FOUND)
+    }
+    return usuarios
   }
 
   async findOne(id: number) {
