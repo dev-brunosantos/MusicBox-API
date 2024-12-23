@@ -31,7 +31,7 @@ export class UsuarioService {
     throw new HttpException("Usuário já cadastrado no sistema, por gentileza, verificar.", HttpStatus.BAD_REQUEST)
   }
 
-  async findAll() {
+  async Listar() {
     const usuarios = await this.prisma.usuario.findMany()
     if (!usuarios) {
       throw new HttpException("Não existe nenhum usuário cadastrado no banco de dados.", HttpStatus.NOT_FOUND)
