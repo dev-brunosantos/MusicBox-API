@@ -29,6 +29,6 @@ export class UsuarioController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.usuarioService.remove(+id);
+    return this.usuarioService.Apagar(id);
   }
 }
