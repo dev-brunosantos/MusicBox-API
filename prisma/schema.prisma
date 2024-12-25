@@ -17,3 +17,11 @@ model Usuario {
   dt_cadastro DateTime @default(now())
   dt_atualizacao DateTime @updatedAt()
 }
+
+model Cargo {
+  id Int @id @default(autoincrement())
+  cargo String @unique
+  
+  dt_cadastro DateTime @default(now())
+  dt_atualizacao DateTime @updatedAt()
+}
