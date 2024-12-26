@@ -2,12 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCargoDto } from './dto/create-cargo.dto';
 import { UpdateCargoDto } from './dto/update-cargo.dto';
 import { PrismaService } from '../prisma/prisma.service'
+import { FunctionsService } from '../functions/functions.service';
 
 @Injectable()
 export class CargoService {
 
   constructor(
-    private prisma: PrismaService
+    private prisma: PrismaService,
+    private formata: FunctionsService
   ) { }
 
   async Criar(createCargoDto: CreateCargoDto) {
@@ -70,8 +72,8 @@ export class CargoService {
 
       
       if (idCargo) {
-        
-        const cargoEditado:UpdateCargoDto = await this.prisma.cargo.update({
+
+        const cargoEditado = await this.prisma.cargo.update({
           where: { id },
           data: updateCargoDto
         })
