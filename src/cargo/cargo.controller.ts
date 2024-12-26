@@ -18,8 +18,8 @@ export class CargoController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cargoService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.cargoService.FiltrarId(id);
   }
 
   @Patch(':id')
