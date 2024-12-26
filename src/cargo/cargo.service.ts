@@ -44,6 +44,7 @@ export class CargoService {
 
     return cargoId
   }
+  
   async FiltrarNome(cargo: string) {
     const cargoNome = await this.prisma.cargo.findFirst({ where: { cargo }})
 
