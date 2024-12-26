@@ -34,6 +34,6 @@ export class CargoController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.cargoService.remove(+id);
+    return this.cargoService.Apagar(Number(id));
   }
 }
