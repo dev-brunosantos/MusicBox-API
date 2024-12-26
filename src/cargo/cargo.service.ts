@@ -8,8 +8,22 @@ export class CargoService {
 
   constructor(private prisma: PrismaService) {}
 
-  create(createCargoDto: CreateCargoDto) {
-    return 'This action adds a new cargo';
+  async Criar(createCargoDto: CreateCargoDto) {
+    const cargoExistente = await this.prisma.cargo.findFirst({
+      where: { cargo: createCargoDto.cargo }
+    })
+
+    if(cargoExistente) {
+      throw new HttpException("O cargo informado ja esta cadastrado no bando de dados.", HttpStatus.CONFLICT)
+    }
+
+    const criarCargo = await this.prisma.cargo.create({
+      data: {
+        cargo: createCargoDto.cargo
+      }
+    })
+
+    return { mensagem: `O cargo ${criarCargo.cargo.toUpperCase()} foi cadastrado com sucesso.`}
   }
 
   async Listar() {
