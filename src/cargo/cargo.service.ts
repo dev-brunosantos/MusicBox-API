@@ -12,7 +12,7 @@ export class CargoService {
     return 'This action adds a new cargo';
   }
 
-  async findAll() {
+  async Listar() {
     const cargos = await this.prisma.cargo.findMany()
     if(!cargos) {
       throw new HttpException("Não existe nenhum registro de cargos cadastrado no sistema.", HttpStatus.NOT_FOUND)
