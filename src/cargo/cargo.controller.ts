@@ -14,7 +14,7 @@ export class CargoController {
 
   @Get()
   findAll() {
-    return this.cargoService.findAll();
+    return this.cargoService.Listar();
   }
 
   @Get(':id')
