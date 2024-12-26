@@ -19,7 +19,8 @@ export class UsuarioService {
           nome: createUsuarioDto.nome,
           sobrenome: createUsuarioDto.sobrenome,
           email: createUsuarioDto.email,
-          senha: createUsuarioDto.senha
+          senha: createUsuarioDto.senha,
+          cargoId: 1 // EXEMPLO DE COMO FICARÁ A ENTRADA DO TIPO DE CARGO ATRAVÉS DO ID
         }
       })
 
