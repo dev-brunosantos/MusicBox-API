@@ -22,6 +22,11 @@ export class CargoController {
     return this.cargoService.FiltrarId(id);
   }
 
+  @Get(':cargo')
+  buscarCargoNome(@Param('cargo') cargo: string) {
+    return this.cargoService.FiltrarNome(cargo)
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCargoDto: UpdateCargoDto) {
     return this.cargoService.update(+id, updateCargoDto);
