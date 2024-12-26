@@ -29,7 +29,7 @@ export class CargoController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCargoDto: UpdateCargoDto) {
-    return this.cargoService.update(+id, updateCargoDto);
+    return this.cargoService.Atualizar(Number(id), updateCargoDto);
   }
 
   @Delete(':id')
