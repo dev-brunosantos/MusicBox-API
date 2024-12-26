@@ -44,7 +44,7 @@ export class CargoService {
 
     return cargoId
   }
-  
+
   async FiltrarNome(cargo: string) {
     const cargoNome = await this.prisma.cargo.findFirst({ where: { cargo }})
 
@@ -55,8 +55,27 @@ export class CargoService {
     return cargoNome
   }
 
-  update(id: number, updateCargoDto: UpdateCargoDto) {
-    return `This action updates a #${id} cargo`;
+  async Atualizar(id: number, updateCargoDto: UpdateCargoDto) {
+    try {
+      const idCargo = await this.prisma.cargo.findFirst({ where: { id }})
+
+      if(!idCargo) {
+        throw new HttpException("Nenhum cargo foi encontrado com o vinculado ao ID informado.", HttpStatus.NOT_FOUND)
+      }
+
+      const cargoEditado = await this.prisma.cargo.update({
+        where: { id },
+        data: updateCargoDto
+      }) 
+
+      return {
+        status: "Atualização realizada com sucesso.",
+        dados_antigos: idCargo,
+        dados_atualizados: cargoEditado
+      }
+    } catch (error) {
+      throw new HttpException("Erro interno! Por favor, tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR)
+    }
   }
 
   remove(id: number) {
