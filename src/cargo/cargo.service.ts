@@ -35,8 +35,14 @@ export class CargoService {
     return cargos
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cargo`;
+  async FiltrarId(id: number) {
+    const cargoId = await this.prisma.cargo.findFirst({ where: { id }})
+
+    if(!cargoId) {
+      throw new HttpException("Não foi encontrado nenhum cargo vinculado ao ID informado.", HttpStatus.NOT_FOUND)
+    }
+
+    return cargoId
   }
 
   update(id: number, updateCargoDto: UpdateCargoDto) {
