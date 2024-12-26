@@ -93,7 +93,20 @@ export class CargoService {
     }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cargo`;
+  async Apagar(id: number) {
+    try {
+      const cargoId = await this.prisma.cargo.findFirst({ where: { id }})
+
+      if(!cargoId) {
+        throw new HttpException("Não foi encontrado nenhum cargo vinculado ao ID informado.", HttpStatus.NOT_FOUND)
+      }
+
+      await this.prisma.cargo.delete({ where: { id }})
+      
+      return { mensagem: `O cargo ${cargoId.cargo.toUpperCase()} foi apagado com sucesso.`}
+
+    } catch (error) {
+      throw new HttpException("Erro interno! Por favor, tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR)
+    }
   }
 }
