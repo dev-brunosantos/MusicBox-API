@@ -2,12 +2,13 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateCargoDto } from './dto/create-cargo.dto';
 import { UpdateCargoDto } from './dto/update-cargo.dto';
 import { PrismaService } from '../prisma/prisma.service'
-import { FormataData } from 'src/functions/formata_data';
 
 @Injectable()
 export class CargoService {
 
-  constructor(private prisma: PrismaService) { }
+  constructor(
+    private prisma: PrismaService
+  ) { }
 
   async Criar(createCargoDto: CreateCargoDto) {
     const cargoExistente = await this.prisma.cargo.findFirst({
@@ -67,30 +68,12 @@ export class CargoService {
         }
       })
 
-      // if(!idCargo) {
-      //   throw new HttpException("Nenhum cargo foi encontrado com o vinculado ao ID informado.", HttpStatus.NOT_FOUND)
-      // }
-
-      // const cargoEditado = await this.prisma.cargo.update({
-      //   where: { id },
-      //   data: updateCargoDto
-      // }) 
-
-      // return {
-      //   status: "Atualização realizada com sucesso.",
-      //   dados_antigos: idCargo,
-      //   dados_atualizados: cargoEditado
-      // }
-
+      
       if (idCargo) {
-        const dataFormatada = FormataData(updateCargoDto.dt_atualizacao)
-
-        const cargoEditado = await this.prisma.cargo.update({
+        
+        const cargoEditado:UpdateCargoDto = await this.prisma.cargo.update({
           where: { id },
-          data: {
-            cargo: updateCargoDto.cargo,
-            dt_atualizacao: dataFormatada
-          }
+          data: updateCargoDto
         })
 
         return {
