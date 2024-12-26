@@ -9,7 +9,7 @@ export class CargoController {
 
   @Post()
   create(@Body() createCargoDto: CreateCargoDto) {
-    return this.cargoService.create(createCargoDto);
+    return this.cargoService.Criar(createCargoDto);
   }
 
   @Get()
