@@ -19,7 +19,8 @@ export class UsuarioService {
           nome: createUsuarioDto.nome,
           sobrenome: createUsuarioDto.sobrenome,
           email: createUsuarioDto.email,
-          senha: createUsuarioDto.senha
+          senha: createUsuarioDto.senha,
+          cargoId: 1 // EXEMPLO DE COMO FICARÁ A ENTRADA DO TIPO DE CARGO ATRAVÉS DO ID
         }
       })
 
@@ -40,20 +41,20 @@ export class UsuarioService {
   }
 
   async Usuario(id: string) {
-    const usuario = await this.prisma.usuario.findFirst({ where: { id }})
+    const usuario = await this.prisma.usuario.findFirst({ where: { id } })
 
-    if(!usuario) {
-      throw new HttpException("Não existe nenhum usuário vinculado ao ID informado.", HttpStatus.NOT_FOUND) 
+    if (!usuario) {
+      throw new HttpException("Não existe nenhum usuário vinculado ao ID informado.", HttpStatus.NOT_FOUND)
     }
     return usuario;
   }
 
   async Atualizar(id: string, updateUsuarioDto: UpdateUsuarioDto) {
     try {
-      const idUsuario = await this.prisma.usuario.findFirst({ where: { id }})
+      const idUsuario = await this.prisma.usuario.findFirst({ where: { id } })
 
-      if(!idUsuario) {
-        throw new HttpException("Não existe nenhum usuário vinculado ao ID informado.", HttpStatus.NOT_FOUND) 
+      if (!idUsuario) {
+        throw new HttpException("Não existe nenhum usuário vinculado ao ID informado.", HttpStatus.NOT_FOUND)
       }
 
       const usuarioEditado = await this.prisma.usuario.update({
@@ -67,11 +68,27 @@ export class UsuarioService {
         dados_atualizados: usuarioEditado
       }
     } catch (error) {
-      throw new HttpException("Tivemos um problema interno, por favor tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR) 
+      throw new HttpException("Tivemos um problema interno, por favor tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR)
     }
   }
 
-  async remove(id: number) {
-    return `This action removes a #${id} usuario`;
+  async Apagar(id: string) {
+    try {
+      const usuarioExistente = await this.prisma.usuario.findFirst({
+        where: { id }
+      })
+
+      if (!usuarioExistente) {
+        throw new HttpException("Não existe nenhum usuário vinculado ao ID informado.", HttpStatus.NOT_FOUND)
+      }
+
+      await this.prisma.usuario.delete({ where: { id } })
+
+      return {
+        mensagem: `Dados do usuário ${usuarioExistente.nome.toUpperCase()} ${usuarioExistente.sobrenome.toUpperCase()} foram apagados com sucesso.`
+      }
+    } catch (error) {
+      throw new HttpException("Tivemos um problema interno, por favor tente novamente.", HttpStatus.INTERNAL_SERVER_ERROR)
+    }
   }
 }

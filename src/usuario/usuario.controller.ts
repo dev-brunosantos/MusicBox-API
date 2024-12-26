@@ -13,22 +13,22 @@ export class UsuarioController {
   }
 
   @Get()
-  findAll() {
+  Listar() {
     return this.usuarioService.Listar();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  Filtrar(@Param('id') id: string) {
     return this.usuarioService.Usuario(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
+  Editar(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
     return this.usuarioService.Atualizar(id, updateUsuarioDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usuarioService.remove(+id);
+  Apagar(@Param('id') id: string) {
+    return this.usuarioService.Apagar(id);
   }
 }
